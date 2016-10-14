@@ -1,148 +1,195 @@
 package dao;
 
+import HibernateUtil.HibernateUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import model.Rubrica;
 
 public class RubricaDao {
-	//le classi di tipo dao contengono tutti i metodi CRUD(Create,Read,UpDate,Delete)
 
 
-	//1-Create
-	public boolean creaRubrica(String nome){
+	// 1- Create 
 
-		boolean bool=false;
-		PreparedStatement st=null;
-		Connection con=null;
+	public boolean creaRubrica(Rubrica r){
+		boolean res=false;
+
+
+		Session session=HibernateUtil.openSession();
+
+		Transaction tx=null;
 
 		try{
-			con=DataSource.getInstance().getConnection();
-			String sql="insert into RUBRICA(nome)"+"VALUES(?)";
-			st=con.prepareStatement(sql);
 
-			st.setString(1, nome);
-			int rs=st.executeUpdate();
+			tx=session.getTransaction();
 
-			if(rs>0) bool=true;
+			tx.begin();
 
-		}catch(SQLException|PropertyVetoException|IOException e){
-			e.printStackTrace();
+			session.persist(r); 
+
+
+			tx.commit(); 
+			res=true;
+		}catch(Exception ex){
+
+			tx.rollback();
+
+
 		}finally{
-			if(st!=null)
-			{
-				try {
-					st.close();
-				}catch(SQLException e){ 
-					e.printStackTrace();
-				}
-			}
+			session.close();
 		}
-		return bool;
+
+
+
+		return res;
+
 	}
 
 
 
-	//2-Read
-	public Rubrica leggiRubrica(int id){
+	// 2- Read ( con Id)
+
+	public Rubrica leggiRubricaConId(long r_id){
+
 		Rubrica r=null;
-		PreparedStatement st=null;
-		Connection con=null;
-		ResultSet rs=null;
+		Session session=HibernateUtil.openSession();
+
+		Transaction tx=null;
+
 		try{
-			con=DataSource.getInstance().getConnection();
-			String sql="select*from RUBRICA where id_rubrica=?";
-			st=con.prepareStatement(sql);
 
-			st.setInt(1, id);
-			rs=st.executeQuery();
+			tx=session.getTransaction();
+
+			tx.begin();
 
 
-			if(rs.next()){
-				int id_rubrica=rs.getInt(1);
-				String nome=rs.getString(2);
-				r=new Rubrica(id_rubrica,nome);
+			r=session.get(Rubrica.class, r_id); 
 
-			}
+			tx.commit(); 
+
+		}catch(Exception ex){
+
+			tx.rollback();
 
 
-
-		}catch(SQLException|PropertyVetoException|IOException e){
-			e.printStackTrace();
 		}finally{
-			if(st!=null)
-			{
-				try {
-					st.close();
-				}catch(SQLException e){ 
-					e.printStackTrace();
-				}
-			}
+			session.close();
+		}
+
+
+
+		return r;
+
+	}
+
+
+	// 2- Read ( con nome )
+
+	public Rubrica leggiRubricaConNome(String nome) {
+		Rubrica r = null;
+
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+
+		try {
+
+			tx = session.getTransaction();
+
+			tx.begin();
+
+			Query query = session
+					.createQuery("from Rubrica where nome=:nomeInserito ");
+
+			query.setString("nomeInserito", nome);
+
+			r = (Rubrica) query.uniqueResult();
+
+			tx.commit();
+
+		} catch (Exception ex) {
+
+			tx.rollback();
+
+		} finally {
+			session.close();
 		}
 
 		return r;
 
 	}
 
-	//3-Update
-	public boolean modificaRubrica(int id,String nome){
+	/*
+	// 1- Update 
 
-		boolean bool=false;
-		PreparedStatement st=null;
-		Connection con=null;
+	public boolean aggiornaRubrica(Rubrica r){
+		boolean res=false;
 
-		try{
-			con=DataSource.getInstance().getConnection();
-			String sql="Update RUBRICA set nome=? where id_rubrica=?";
-			st=con.prepareStatement(sql);
 
-			st.setString(1, nome);
-			st.setInt(2,id );
-			int rs=st.executeUpdate();
 
-			if(rs>0) bool=true;
 
-		}catch(SQLException|PropertyVetoException|IOException e){
-			e.printStackTrace();
-		}finally{
-			if(st!=null)
-			{
-				try {
-					st.close();
-				}catch(SQLException e){ 
-					e.printStackTrace();
-				}
-			}
-		}
-		return bool;
-	}
-	
-	//4-delete
-	public boolean rimuoviRubrica(int id){
 
-		boolean bool=false;
-		PreparedStatement st=null;
-		Connection con=null;
+		Session session=HibernateUtil.openSession();
+
+		Transaction tx=null;
 
 		try{
-			con=DataSource.getInstance().getConnection();
-			String sql="delete from RUBRICA where id_rubrica=?";
-			st=con.prepareStatement(sql);
 
-			st.setInt(1,id );
-			int rs=st.executeUpdate();
+			tx=session.getTransaction();
 
-			if(rs>0) bool=true;
+			tx.begin();
 
-		}catch(SQLException|PropertyVetoException|IOException e){
-			e.printStackTrace();
+			session.update(r); 
+
+
+			tx.commit(); 
+			res=true;
+		}catch(Exception ex){
+
+			tx.rollback();
+
+
 		}finally{
-			if(st!=null)
-			{
-				try {
-					st.close();
-				}catch(SQLException e){ 
-					e.printStackTrace();
-				}
-			}
+			session.close();
 		}
-		return bool;
+
+
+
+		return res;
+
 	}
+	//delete
+	public boolean rimuoviRubrica(long r_id){
+		boolean res=false;
+
+		Session session=HibernateUtil.openSession();
+
+		Transaction tx=null;
+		Rubrica r=null;
+		try{
+
+			tx=session.getTransaction();
+
+			tx.begin();
+			r=session.get(Rubrica.class, r_id);
+			session.delete(r);
+
+
+			tx.commit(); 
+			res=true;
+		}catch(Exception ex){
+
+			tx.rollback();
+
+
+		}finally{
+			session.close();
+		}
+
+
+
+		return res;
+
+	}*/
 
 }

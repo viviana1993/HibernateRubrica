@@ -2,53 +2,63 @@ package model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
 public class Voce {
 	
-	@Id
-	@GeneratedValue
-	private int id_voce;
+	@Id 
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private long id_voce;
+	
 	private String nome;
 	private String cognome;
-	private String telefono;
-	
-	
+	private String tel;
 	
 	@ManyToOne
-	@JoinColumn(name="rubrica")
-	private int id_rubrica;
+	private Rubrica rubrica;
 	
+	
+
 
 
 	public Voce() {
-		super();
+
+		this.nome = "";
+		this.cognome = "";
+		this.tel = "";
 	}
+	
+	
+	
+	public Voce( String nome, String cognome, String tel) {
 
-
-	public Voce(int id_voce, String nome, String cognome, String telefono,
-			int id_rubrica) {
-		super();
-		this.id_voce = id_voce;
 		this.nome = nome;
 		this.cognome = cognome;
-		this.telefono = telefono;
-		this.id_rubrica = id_rubrica;
-	
+		this.tel = tel;
 	}
 
 
-	public int getId_voce() {
+
+	@Override
+	public String toString() {
+		return nome +" "+cognome+" "+tel;
+	}
+
+
+
+	public long getId_voce() {
 		return id_voce;
 	}
 
 
-	public void setId_voce(int id_voce) {
+
+	public void setId_voce(long id_voce) {
 		this.id_voce = id_voce;
 	}
+
 
 
 	public String getNome() {
@@ -56,9 +66,11 @@ public class Voce {
 	}
 
 
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 
 
 	public String getCognome() {
@@ -66,31 +78,34 @@ public class Voce {
 	}
 
 
+
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
 
 
-	public String getTelefono() {
-		return telefono;
+
+	public String getTel() {
+		return tel;
 	}
 
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
 
-
-	public int getId_rubrica() {
-		return id_rubrica;
-	}
-
-
-	public void setId_rubrica(int id_rubrica) {
-		this.id_rubrica = id_rubrica;
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 	
 	
+	public Rubrica getRubrica() {
+		return rubrica;
+	}
+
+
+
+	public void setRubrica(Rubrica rubrica) {
+		this.rubrica = rubrica;
+	}
 	
 	
+
 }

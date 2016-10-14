@@ -1,4 +1,7 @@
 package prova;
+import model.Rubrica;
+import model.Voce;
+import dao.RubricaDao;
 import servizi.ServizioRubrica;
 
 public class TestHQLRubrica {
@@ -6,15 +9,21 @@ public class TestHQLRubrica {
 	public static void main(String[] args) {
 
 
-				ServizioRubrica sRub= new ServizioRubrica();
-				boolean b=sRub.registraRubrica("Vahid");
-				System.out.println("rubrica stato creato ? ");
-		//				
-		//				
-		//RubricaDao rDao=new RubricaDao();
+		ServizioRubrica sRub= new ServizioRubrica();
+		
+		System.out.println(sRub.registraRubrica("aaaaa"));
+					
+		RubricaDao rDao=new RubricaDao();
 
-	//	Rubrica r=rDao.leggiRubricaConId(2);
-
+		Rubrica r=rDao.leggiRubricaConId(1);
+		System.out.println(r.getId_Rubrica()+" "+r.getNome());
+		
+		sRub.aggiungiVoce(r,"vv", "ccc", "tel");
+		for (Voce v:r.getVoci()){
+			System.out.println(v.getId_voce()+" "+v.getNome());
+		}
+		
+		
 
 	}
 

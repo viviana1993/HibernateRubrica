@@ -1,10 +1,10 @@
 package dao;
 
-import HibernateUtil.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import HibernateUtil.HibernateUtil;
 import model.Rubrica;
 
 public class RubricaDao {
@@ -14,8 +14,6 @@ public class RubricaDao {
 
 	public boolean creaRubrica(Rubrica r){
 		boolean res=false;
-
-
 		Session session=HibernateUtil.openSession();
 
 		Transaction tx=null;
@@ -119,14 +117,10 @@ public class RubricaDao {
 
 	}
 
-	/*
 	// 1- Update 
 
 	public boolean aggiornaRubrica(Rubrica r){
 		boolean res=false;
-
-
-
 
 
 		Session session=HibernateUtil.openSession();
@@ -157,7 +151,7 @@ public class RubricaDao {
 
 		return res;
 
-	}
+	}/*
 	//delete
 	public boolean rimuoviRubrica(long r_id){
 		boolean res=false;
